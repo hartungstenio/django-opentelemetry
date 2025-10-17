@@ -1,0 +1,61 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "django-opentelemetry"
+dynamic = ["version"]
+description = ''
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "Christian Hartung", email = "christian.hartung@olist.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = []
+
+[project.urls]
+Documentation = "https://github.com/Christian Hartung/django-opentelemetry#readme"
+Issues = "https://github.com/Christian Hartung/django-opentelemetry/issues"
+Source = "https://github.com/Christian Hartung/django-opentelemetry"
+
+[tool.hatch.version]
+path = "src/django_opentelemetry/__about__.py"
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+  "mypy>=1.0.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/django_opentelemetry tests}"
+
+[tool.coverage.run]
+source_pkgs = ["django_opentelemetry", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/django_opentelemetry/__about__.py",
+]
+
+[tool.coverage.paths]
+django_opentelemetry = ["src/django_opentelemetry", "*/django-opentelemetry/src/django_opentelemetry"]
+tests = ["tests", "*/django-opentelemetry/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
