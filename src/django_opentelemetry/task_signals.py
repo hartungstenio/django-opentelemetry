@@ -1,6 +1,7 @@
 """Task metrics."""
 
-from typing import TYPE_CHECKING, Literal, Protocol
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, Literal, Protocol
 
 import django
 from django.dispatch import receiver
@@ -10,14 +11,14 @@ if TYPE_CHECKING:
     from opentelemetry.util.types import Attributes
 
 if django.VERSION >= (6, 0):
-    from django.tasks import signals as django_native_signals
+    from django.tasks import signals as django_native_signals  # type: ignore[import-untyped]
 else:
     django_native_signals = None
 
 try:
     from django_tasks import signals as django_tasks_signals
 except ImportError:
-    django_tasks_signals = None
+    django_tasks_signals = None  # type: ignore[assignment]
 
 
 if django_native_signals or django_tasks_signals:
@@ -48,17 +49,17 @@ if django_native_signals or django_tasks_signals:
         description="Number of currently running tasks",
     )
 
-    class _TaskResult(Protocol):
-        status: Literal["READY", "RUNNING", "FAILED", "SUCCEEDED"]
-
     class _Task(Protocol):
         queue_name: str
 
-    class _TaskBackend(Protocol):
+    class _TaskResult(Protocol):
+        status: Literal["READY", "RUNNING", "FAILED", "SUCCEEDED"]
         task: _Task
+
+    class _TaskBackend(Protocol):
         alias: str
 
-    def on_task_enqueued(*, sender: type[_TaskBackend], task_result: _TaskResult) -> None:
+    def on_task_enqueued(*, sender: type[_TaskBackend], task_result: _TaskResult, **_kwargs: Mapping[str, Any]) -> None:
         """Increment the number of enqueued and pending tasks."""
         task_attributes: Attributes = {
             "backend": sender.alias,
@@ -67,7 +68,7 @@ if django_native_signals or django_tasks_signals:
         tasks_enqueued.add(1, task_attributes)
         tasks_pending.add(1, task_attributes)
 
-    def on_task_started(*, sender: type[_TaskBackend], task_result: _TaskResult) -> None:
+    def on_task_started(*, sender: type[_TaskBackend], task_result: _TaskResult, **_kwargs: Mapping[str, Any]) -> None:
         """Increment the number of started and running tasks."""
         task_attributes: Attributes = {
             "backend": sender.alias,
@@ -77,7 +78,7 @@ if django_native_signals or django_tasks_signals:
         tasks_pending.add(-1, task_attributes)
         tasks_running.add(1, task_attributes)
 
-    def on_task_finished(*, sender: type[_TaskBackend], task_result: _TaskResult) -> None:
+    def on_task_finished(*, sender: type[_TaskBackend], task_result: _TaskResult, **_kwargs: Mapping[str, Any]) -> None:
         """Increment the number of enqueued and pending tasks."""
         task_attributes: Attributes = {
             "backend": sender.alias,
