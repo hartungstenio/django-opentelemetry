@@ -1,14 +1,6 @@
-from typing import TYPE_CHECKING
-
 import pytest
+from django_tasks import task
 from opentelemetry.sdk.metrics.export import InMemoryMetricReader, MetricsData
-
-if TYPE_CHECKING:
-    from django.tasks import task
-else:
-    django_tasks = pytest.importorskip("django.tasks")
-    task = django_tasks.task
-
 
 pytestmark = pytest.mark.django_db
 
