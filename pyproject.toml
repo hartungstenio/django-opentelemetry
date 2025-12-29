@@ -99,6 +99,7 @@ cov = [
 ]
 
 [tool.hatch.envs.hatch-test]
+features = ["tasks"]
 extra-dependencies = [
   "pytest-asyncio",
   "pytest-django",

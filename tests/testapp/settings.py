@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_opentelemetry",
+    "django_tasks",
+    "django_tasks.backends.database",
     "tests",
 ]
 
@@ -122,3 +124,18 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+TASKS = {
+    "default": {
+        "BACKEND": "django_tasks.backends.database.DatabaseBackend",
+        "QUEUES": ["default", "some_queue"],
+    },
+    "secondary": {
+        "BACKEND": "django_tasks.backends.database.DatabaseBackend",
+        "QUEUES": ["default", "some_queue"],
+    },
+    "immediate": {
+        "BACKEND": "django_tasks.backends.immediate.ImmediateBackend",
+        "QUEUES": ["default", "some_queue"],
+    },
+}

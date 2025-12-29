@@ -55,33 +55,31 @@ if django_native_signals or django_tasks_signals:
     class _TaskResult(Protocol):
         status: Literal["READY", "RUNNING", "FAILED", "SUCCEEDED"]
         task: _Task
+        backend: str
 
-    class _TaskBackend(Protocol):
-        alias: str
-
-    def on_task_enqueued(*, sender: type[_TaskBackend], task_result: _TaskResult, **_kwargs: Mapping[str, Any]) -> None:
+    def on_task_enqueued(*, task_result: _TaskResult, **_kwargs: Mapping[str, Any]) -> None:
         """Increment the number of enqueued and pending tasks."""
         task_attributes: Attributes = {
-            "backend": sender.alias,
+            "backend": task_result.backend,
             "queue_name": task_result.task.queue_name,
         }
         tasks_enqueued.add(1, task_attributes)
         tasks_pending.add(1, task_attributes)
 
-    def on_task_started(*, sender: type[_TaskBackend], task_result: _TaskResult, **_kwargs: Mapping[str, Any]) -> None:
+    def on_task_started(*, task_result: _TaskResult, **_kwargs: Mapping[str, Any]) -> None:
         """Increment the number of started and running tasks."""
         task_attributes: Attributes = {
-            "backend": sender.alias,
+            "backend": task_result.backend,
             "queue_name": task_result.task.queue_name,
         }
         tasks_started.add(1, task_attributes)
         tasks_pending.add(-1, task_attributes)
         tasks_running.add(1, task_attributes)
 
-    def on_task_finished(*, sender: type[_TaskBackend], task_result: _TaskResult, **_kwargs: Mapping[str, Any]) -> None:
+    def on_task_finished(*, task_result: _TaskResult, **_kwargs: Mapping[str, Any]) -> None:
         """Increment the number of enqueued and pending tasks."""
         task_attributes: Attributes = {
-            "backend": sender.alias,
+            "backend": task_result.backend,
             "queue_name": task_result.task.queue_name,
         }
 
