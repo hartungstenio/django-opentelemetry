@@ -126,7 +126,7 @@ python = ["3.12", "3.13", "3.14"]
 
 [tool.hatch.envs.hatch-static-analysis]
 config-path = "none"
-dependencies = ["ruff==0.12.0"]
+dependencies = ["ruff==0.14.10"]
 
 [tool.mypy]
 strict = true
