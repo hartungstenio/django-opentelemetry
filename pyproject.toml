@@ -89,7 +89,7 @@ features = ["tasks"]
 
 
 [tool.hatch.envs.default.scripts]
-types = "mypy --install-types --non-interactive {args:src/django_opentelemetry tests}"
+types = "mypy --install-types --non-interactive {args:src/django_opentelemetry}"
 test = "pytest {args:tests}"
 test-cov = "coverage run -m pytest {args:tests}"
 cov-report = [
