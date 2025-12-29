@@ -31,6 +31,9 @@ dependencies = [
 ]
 dynamic = ["version"]
 
+[project.optional-dependencies]
+tasks = ["django-tasks"]
+
 [project.urls]
 Documentation = "https://github.com/hartungstenio/django-opentelemetry#readme"
 Issues = "https://github.com/hartungstenio/django-opentelemetry/issues"
@@ -66,6 +69,7 @@ source = "vcs"
 python = ["3.10", "3.11", "3.12", "3.13"]
 
 [tool.hatch.envs.default]
+features = ["tasks"]
 dependencies = [
   "coverage[toml]>=6.5",
   "django-stubs",
@@ -181,3 +185,6 @@ ban-relative-imports = "parents"
 "*/models.py" = ["D106"]
 "*/migrations/*.py" = ["D", "RUF012"]
 "tests/*.py" = ["D104", "S101"]
+
+[tool.ruff.lint.flake8-self]
+ignore-names = ["_meta"]
