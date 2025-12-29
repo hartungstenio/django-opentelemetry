@@ -31,13 +31,13 @@ dependencies = [
 ]
 dynamic = ["version"]
 
-[project.optional-dependencies]
-tasks = ["django-tasks"]
-
 [project.urls]
 Documentation = "https://github.com/hartungstenio/django-opentelemetry#readme"
 Issues = "https://github.com/hartungstenio/django-opentelemetry/issues"
 Source = "https://github.com/hartungstenio/django-opentelemetry"
+
+[project.optional-dependencies]
+tasks = ["django-tasks"]
 
 [build-system]
 requires = ["hatch-vcs", "hatchling"]
@@ -62,6 +62,9 @@ exclude_lines = [
   "if TYPE_CHECKING:",
 ]
 
+[tool.django-stubs]
+django_settings_module = "tests.testapp.settings"
+
 [tool.hatch.version]
 source = "vcs"
 
@@ -74,14 +77,16 @@ dependencies = [
   "coverage[toml]>=6.5",
   "django-stubs",
   "mypy",
-  "pytest",
+  "opentelemetry-sdk",
+  "opentelemetry-test-utils",
   "pytest-asyncio",
   "pytest-deadfixtures",
   "pytest-django",
+  "pytest",
 ]
 
 [tool.hatch.envs.default.scripts]
-types = "mypy --install-types --non-interactive {args:src/django_workspaces tests}"
+types = "mypy --install-types --non-interactive {args:src/django_opentelemetry tests}"
 test = "pytest {args:tests}"
 test-cov = "coverage run -m pytest {args:tests}"
 cov-report = [
@@ -94,7 +99,12 @@ cov = [
 ]
 
 [tool.hatch.envs.hatch-test]
-extra-dependencies = ["pytest-asyncio", "pytest-django"]
+extra-dependencies = [
+  "pytest-asyncio",
+  "pytest-django",
+  "opentelemetry-sdk",
+  "opentelemetry-test-utils",
+]
 
 [tool.hatch.envs.hatch-test.overrides]
 matrix.django.dependencies = [
@@ -115,7 +125,7 @@ plugins = ["mypy_django_plugin.main"]
 
 [tool.pytest.ini_options]
 pythonpath = [".", "src"]
-DJANGO_SETTINGS_MODULE = "demo.settings"
+DJANGO_SETTINGS_MODULE = "tests.testapp.settings"
 
 [tool.ruff]
 line-length = 120
@@ -184,7 +194,7 @@ ban-relative-imports = "parents"
 [tool.ruff.lint.per-file-ignores]
 "*/models.py" = ["D106"]
 "*/migrations/*.py" = ["D", "RUF012"]
-"tests/*.py" = ["D104", "S101"]
+"tests/*.py" = ["D", "S101"]
 
 [tool.ruff.lint.flake8-self]
 ignore-names = ["_meta"]

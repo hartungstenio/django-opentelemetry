@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from . import features
 
 if features.should_use_model_meta() and "metric_label" not in options.DEFAULT_NAMES:
-    options.DEFAULT_NAMES = tuple(*options.DEFAULT_NAMES, "metric_label")
+    options.DEFAULT_NAMES = (*options.DEFAULT_NAMES, "metric_label")
 
 
 class OpenTelemetryConfig(AppConfig):
