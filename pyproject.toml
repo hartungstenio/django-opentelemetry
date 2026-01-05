@@ -2,7 +2,7 @@
 name = "django-opentelemetry"
 description = "Django reusable app to collect OpenTelemetry Metrics"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 license = "MIT"
 authors = [
   { name = "Christian Hartung", email = "6785871+hartungstenio@users.noreply.github.com" },
@@ -13,6 +13,7 @@ classifiers = [
   "Environment :: Web Environment",
   "Framework :: Django",
   "Framework :: Django :: 5.2",
+  "Framework :: Django :: 6.0",
   "Intended Audience :: Developers",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
@@ -28,6 +29,7 @@ classifiers = [
 dependencies = [
   "django>=5.2",
   "opentelemetry-api",
+  "typing-extensions; python_version < '3.12'",
 ]
 dynamic = ["version"]
 
@@ -38,6 +40,7 @@ Source = "https://github.com/hartungstenio/django-opentelemetry"
 
 [project.optional-dependencies]
 tasks = ["django-tasks"]
+channels = ["channels", "opentelemetry-instrumentation-asgi"]
 
 [build-system]
 requires = ["hatch-vcs", "hatchling"]
@@ -85,7 +88,7 @@ python = ["3.10", "3.11", "3.12", "3.13"]
 
 [tool.hatch.envs.default]
 dependency-groups = ["dev"]
-features = ["tasks"]
+features = ["tasks", "channels"]
 
 
 [tool.hatch.envs.default.scripts]
@@ -102,7 +105,7 @@ cov = [
 ]
 
 [tool.hatch.envs.hatch-test]
-features = ["tasks"]
+features = ["tasks", "channels"]
 extra-dependencies = [
   "pytest-asyncio",
   "pytest-django",
