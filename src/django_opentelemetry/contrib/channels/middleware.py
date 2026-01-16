@@ -2,10 +2,9 @@
 
 from collections.abc import Awaitable, Callable, MutableMapping
 from timeit import default_timer
-from typing import Any, Literal, TypedDict, TypeGuard
+from typing import Any, Literal
 
-from asgiref.typing import ASGI3Application, ASGIReceiveCallable, ASGISendCallable
-from asgiref.typing import Scope as DefaultScope
+from asgiref.typing import ASGI3Application
 from opentelemetry import metrics, trace
 from opentelemetry.instrumentation.asgi import (
     OpenTelemetryMiddleware as OTelASGIMiddleware,

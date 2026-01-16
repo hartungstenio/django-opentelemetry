@@ -5,7 +5,6 @@ from asgiref.testing import ApplicationCommunicator
 from opentelemetry import metrics, trace
 from opentelemetry.sdk.metrics._internal.export import InMemoryMetricReader
 from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
-from opentelemetry.test.asgitestutil import AsgiTestBase
 
 from django_opentelemetry.contrib.channels.middleware import OpenTelemetryMiddleware
 
